@@ -108,18 +108,18 @@ function meval(form, ctx) {
     }
     //general application
     if(isApplyForm(form)){
-	let [f, ...args] = form;
-	f = meval(f, ctx);
-	args = args.map(a => meval(a, ctx));
-	if(isNativeFunction(f)){
-	    return f(...args);
-	}else if(isFn(f)){
-	    let { params, body, ctx: function_ctx } = f;
+	let [operator, ...operands] = form;
+	let fn = meval(operator, ctx);
+	let args = operands.map(a => meval(a, ctx));
+	if(isNativeFunction(fn)){
+	    return fn(...args);
+	}else if(isFn(fn)){
+	    let { params, body, ctx: function_ctx } = fn;
 	    let newCtx = {
 		...ctx,
 		...function_ctx,
 		...bind(params, args),
-		"recur": f
+		"recur": fn
 	    };
 	    let results = body.map(b => meval(b, newCtx));
 	    return results[results.length - 1];
