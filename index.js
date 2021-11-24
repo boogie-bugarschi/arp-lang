@@ -3,6 +3,17 @@ function isTruthy(x){
     return x !== false && x !== null && x !== undefined;
 }
 
+/** 
+  * create new context from a list of names and list of values 
+  */
+function bind(names, values){
+    let result = {};
+    for(let i = 0; i < names.length; i++){
+	result[names[i]] = values[i];
+    }
+    return result;
+}
+
 function lookup(x, ctx){
     if(ctx.hasOwnProperty(x)){
 	return ctx[x];
@@ -62,14 +73,6 @@ class Fn{
 	this.body = body;
 	this.ctx = ctx;
     }
-}
-
-function bind(names, values){
-    let result = {};
-    for(let i = 0; i < names.length; i++){
-	result[names[i]] = values[i];
-    }
-    return result;
 }
 
 function meval(form, ctx) {
